@@ -1,6 +1,6 @@
 package cn.ocoop.shiro;
 
-import cn.ocoop.shiro.spring.AppContextShiro;
+import cn.ocoop.spring.App;
 import org.apache.shiro.util.CollectionUtils;
 import org.apache.shiro.util.Nameable;
 import org.apache.shiro.util.StringUtils;
@@ -104,7 +104,7 @@ public class ShiroFilterFactoryBean extends org.apache.shiro.spring.web.ShiroFil
 
     protected void createChain(DefaultFilterChainManager manager) {
         try {
-            AppContextShiro.getBean(FilterChainService.class).createFilterChains(manager);
+            App.getBean(FilterChainService.class).createFilterChains(manager);
         } catch (NoSuchBeanDefinitionException e) {
             log.warn("FilterChainService未配置");
         } catch (Throwable e) {

@@ -3,7 +3,7 @@ package cn.ocoop.shiro.filter.authc;
 import cn.ocoop.captcha.Captcha;
 import cn.ocoop.captcha.GifCaptcha;
 import cn.ocoop.captcha.SpecCaptcha;
-import cn.ocoop.shiro.spring.AppContextShiro;
+import cn.ocoop.spring.App;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.core.env.Environment;
@@ -26,7 +26,7 @@ public class CaptchaGeneratorFilter extends RateLimitWithCaptchaFilter {
     }
 
     private Captcha getCaptcha() {
-        Environment environment = AppContextShiro.getBean(Environment.class);
+        Environment environment = App.getBean(Environment.class);
         String captchaType = environment.getProperty("shiro.captcha.img.type", "jpg");
         int width = environment.getProperty("shiro.captcha.img.width", int.class, 150);
         int height = environment.getProperty("shiro.captcha.img.height", int.class, 40);

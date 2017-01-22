@@ -1,8 +1,8 @@
 package cn.ocoop.shiro.filter.authc;
 
 import cn.ocoop.shiro.session.mgt.ShiroSessionDaoRedisAdapter;
-import cn.ocoop.shiro.spring.AppContextShiro;
 import cn.ocoop.shiro.utils.RequestUtil;
+import cn.ocoop.spring.App;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  * Created by liolay on 16-6-20.
  */
 public class RateLimitWithCaptchaFilter extends AccessControlFilter {
-    public static final String SUBMIT_CAPTCHA = AppContextShiro.getBean(Environment.class).getProperty("shiro.captcha.header", "Submit-Captcha");
+    public static final String SUBMIT_CAPTCHA = App.getBean(Environment.class).getProperty("shiro.captcha.header", "Submit-Captcha");
     private static final DateTimeFormatter SEND_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String FREQUENCY_KEY = "send_captcha_times";
     private Long rateLifeTime = 3600000l;//一小时
@@ -60,7 +60,7 @@ public class RateLimitWithCaptchaFilter extends AccessControlFilter {
     }
 
     private boolean rateUnderflow() {
-        RedisTemplate redisTemplate = AppContextShiro.getBean(RedisTemplate.class);
+        RedisTemplate redisTemplate = App.getBean(RedisTemplate.class);
         String rateKey = getRatePrefix() + ":" + Instant.now().getEpochSecond();
         long reachTimes = getReachTimes(redisTemplate);
         if (reachTimes > maxRate) return false;
@@ -85,7 +85,7 @@ public class RateLimitWithCaptchaFilter extends AccessControlFilter {
     }
 
     private String getRatePrefix() {
-        return AppContextShiro.getBean(ShiroSessionDaoRedisAdapter.class).getRedisSessionKey(getSession().getId()) + ":" + FREQUENCY_KEY;
+        return App.getBean(ShiroSessionDaoRedisAdapter.class).getRedisSessionKey(getSession().getId()) + ":" + FREQUENCY_KEY;
     }
 
     private String getReceivedCaptcha(ServletRequest request) {

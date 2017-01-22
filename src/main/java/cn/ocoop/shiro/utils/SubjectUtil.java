@@ -4,7 +4,7 @@ package cn.ocoop.shiro.utils;
 import cn.ocoop.shiro.authz.SingleModularRealmAuthorizer;
 import cn.ocoop.shiro.filter.AjaxAuthenticationFilter;
 import cn.ocoop.shiro.filter.AutoAuthenticationFilter;
-import cn.ocoop.shiro.spring.AppContextShiro;
+import cn.ocoop.spring.App;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -58,11 +58,11 @@ public class SubjectUtil {
     }
 
     public static List<String> getRoles() {
-        return AppContextShiro.getBean(SingleModularRealmAuthorizer.class).getRoles();
+        return App.getBean(SingleModularRealmAuthorizer.class).getRoles();
     }
 
     public static List<String> getPermissions() {
-        return AppContextShiro.getBean(SingleModularRealmAuthorizer.class).getPermissions();
+        return App.getBean(SingleModularRealmAuthorizer.class).getPermissions();
     }
 
 

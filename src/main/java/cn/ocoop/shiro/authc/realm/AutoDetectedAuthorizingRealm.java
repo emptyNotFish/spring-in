@@ -3,8 +3,8 @@ package cn.ocoop.shiro.authc.realm;
 import cn.ocoop.shiro.AutoDetectedToken;
 import cn.ocoop.shiro.authc.realm.resolves.AutoDetectedSubjectResolve;
 import cn.ocoop.shiro.authc.realm.resolves.SubjectResolve;
-import cn.ocoop.shiro.spring.AppContextShiro;
 import cn.ocoop.shiro.subject.User;
+import cn.ocoop.spring.App;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -32,7 +32,7 @@ public class AutoDetectedAuthorizingRealm extends AbstractAuthorizingRealm {
     }
 
     protected SubjectResolve getSubjectResolve() {
-        return AppContextShiro.getBean(AutoDetectedSubjectResolve.class);
+        return App.getBean(AutoDetectedSubjectResolve.class);
     }
 
 }

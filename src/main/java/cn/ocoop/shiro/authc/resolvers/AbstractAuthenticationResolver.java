@@ -1,7 +1,7 @@
 package cn.ocoop.shiro.authc.resolvers;
 
-import cn.ocoop.shiro.spring.AppContextShiro;
 import cn.ocoop.shiro.vo.Result;
+import cn.ocoop.spring.App;
 import com.alibaba.fastjson.JSON;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -70,7 +70,7 @@ public abstract class AbstractAuthenticationResolver {
     }
 
     private Cookie storeSessionId(ServletRequest request, ServletResponse response, Session session) {
-        DefaultWebSessionManager defaultWebSessionManager = (DefaultWebSessionManager) AppContextShiro.getBean(WebSessionManager.class);
+        DefaultWebSessionManager defaultWebSessionManager = (DefaultWebSessionManager) App.getBean(WebSessionManager.class);
         Cookie template = defaultWebSessionManager.getSessionIdCookie();
         Cookie cookie = new SimpleCookie(template);
         String idString = session.getId().toString();

@@ -3,9 +3,9 @@ package cn.ocoop.shiro.authc.resolvers;
 import cn.ocoop.shiro.authc.realm.resolves.MobileCaptchaSubjectResolve;
 import cn.ocoop.shiro.cache.ShiroRealmCacheManager;
 import cn.ocoop.shiro.filter.AjaxAuthenticationFilter;
-import cn.ocoop.shiro.spring.AppContextShiro;
 import cn.ocoop.shiro.utils.SubjectUtil;
 import cn.ocoop.shiro.vo.Result;
+import cn.ocoop.spring.App;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.session.Session;
@@ -45,7 +45,7 @@ public class UnionAuthenticationResolver  extends AbstractAuthenticationResolver
     }
 
     private void saveSidState(Session session) {
-        AppContextShiro.getBean(RedisTemplate.class).opsForValue().set(getSidStateKey(session.getId()), null, 5, TimeUnit.MINUTES);
+        App.getBean(RedisTemplate.class).opsForValue().set(getSidStateKey(session.getId()), null, 5, TimeUnit.MINUTES);
     }
 
     private static String getSidStateKey(Serializable sid) {
@@ -55,7 +55,7 @@ public class UnionAuthenticationResolver  extends AbstractAuthenticationResolver
 
     @Override
     protected void onLoginSuccess(AuthenticationToken token) {
-        MobileCaptchaSubjectResolve resolve = AppContextShiro.getBean(MobileCaptchaSubjectResolve.class);
+        MobileCaptchaSubjectResolve resolve = App.getBean(MobileCaptchaSubjectResolve.class);
         Object userInfo = resolve.findLoginUserInfo((String) SecurityUtils.getSubject().getPrincipal());
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute(AjaxAuthenticationFilter.USER_INFO_KEY, userInfo);
@@ -63,15 +63,15 @@ public class UnionAuthenticationResolver  extends AbstractAuthenticationResolver
     }
 
     public static boolean isValidSid(String sid) {
-        boolean hasValidSid = AppContextShiro.getBean(RedisTemplate.class).hasKey(getSidStateKey(sid));
-        AppContextShiro.getBean(RedisTemplate.class).delete(getSidStateKey(sid));
+        boolean hasValidSid = App.getBean(RedisTemplate.class).hasKey(getSidStateKey(sid));
+        App.getBean(RedisTemplate.class).delete(getSidStateKey(sid));
         return hasValidSid;
     }
 
     public static void useAndInvalidSid(HttpServletRequest request, HttpServletResponse response, String sid) {
         if (!isValidSid(sid)) return;
 
-        DefaultWebSessionManager defaultWebSessionManager = (DefaultWebSessionManager) AppContextShiro.getBean(WebSessionManager.class);
+        DefaultWebSessionManager defaultWebSessionManager = (DefaultWebSessionManager) App.getBean(WebSessionManager.class);
         Cookie template = defaultWebSessionManager.getSessionIdCookie();
         Cookie cookie = new SimpleCookie(template);
         cookie.setValue(sid);

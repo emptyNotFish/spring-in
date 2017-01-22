@@ -1,6 +1,6 @@
 package cn.ocoop.shiro.sms;
 
-import cn.ocoop.shiro.spring.AppContextShiro;
+import cn.ocoop.spring.App;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class AuthcSmsCaptchaService {
 
     private static int sendMessage(String mobile) {
         try {
-            AppContextShiro.getBean(AuthcSmsCaptchaServiceAware.class).sendMessage(mobile);
+            App.getBean(AuthcSmsCaptchaServiceAware.class).sendMessage(mobile);
             getSession().setAttribute(LOGIN_SMS_CAPTCHA_LIMIT_TIME, Instant.now());
         } catch (Exception e) {
             log.error("登录短信验证码发送失败", e);
@@ -50,7 +50,7 @@ public class AuthcSmsCaptchaService {
     }
 
     public static boolean verify(String mobile, String captcha) {
-        boolean verifyResult = AppContextShiro.getBean(AuthcSmsCaptchaServiceAware.class).verify(mobile, captcha);
+        boolean verifyResult = App.getBean(AuthcSmsCaptchaServiceAware.class).verify(mobile, captcha);
         getSession().removeAttribute(LOGIN_SMS_CAPTCHA_LIMIT_TIME);
         return verifyResult;
     }

@@ -6,10 +6,10 @@ import cn.ocoop.shiro.authc.LoginType;
 import cn.ocoop.shiro.authc.realm.resolves.MobileCaptchaSubjectResolve;
 import cn.ocoop.shiro.authc.realm.resolves.SubjectResolve;
 import cn.ocoop.shiro.cache.ShiroRealmCacheManager;
-import cn.ocoop.shiro.spring.AppContextShiro;
 import cn.ocoop.shiro.utils.RequestUtil;
 import cn.ocoop.shiro.utils.SubjectUtil;
 import cn.ocoop.shiro.vo.Result;
+import cn.ocoop.spring.App;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -32,7 +32,7 @@ public class AjaxAuthenticationFilter extends FormAuthenticationFilter {
     public static final String LOGIN_TYPE = getEnvironment().getProperty("shiro.authc.loginTypeParam","loginType");
 
     private static Environment getEnvironment() {
-        return AppContextShiro.getBean(Environment.class);
+        return App.getBean(Environment.class);
     }
     private static final Logger log = LoggerFactory.getLogger(AjaxAuthenticationFilter.class);
     protected int unLoginStatusCode = RequestUtil.SC_UNLOGIN_1;
@@ -97,7 +97,7 @@ public class AjaxAuthenticationFilter extends FormAuthenticationFilter {
     private SubjectResolve getSubjectResolve(AuthenticationToken token) {
 
         if (MobileCaptchaToken.class.isAssignableFrom(token.getClass()) || UsernamePasswordToken.class.isAssignableFrom(token.getClass())) {
-            return AppContextShiro.getBean(MobileCaptchaSubjectResolve.class);
+            return App.getBean(MobileCaptchaSubjectResolve.class);
         }
         throw new Error("不支持的token类型");
     }

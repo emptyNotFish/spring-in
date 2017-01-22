@@ -38,10 +38,16 @@ import java.util.List;
 @ComponentScan(
         basePackages = "cn.ocoop.spring,${springmvc.basePackages}",
         useDefaultFilters = false,
-        includeFilters = @ComponentScan.Filter(
-                type = FilterType.ANNOTATION,
-                value = {ControllerAdvice.class, Controller.class, RestControllerAdvice.class, RestController.class, Configuration.class}
-        )
+        includeFilters = {
+                @ComponentScan.Filter(
+                        type = FilterType.ANNOTATION,
+                        value = {ControllerAdvice.class, Controller.class, RestControllerAdvice.class, RestController.class}
+                ),
+                @ComponentScan.Filter(
+                        type = FilterType.ASSIGNABLE_TYPE,
+                        value = {WebMvcConfigurerAdapter.class}
+                )
+        }
 )
 public class SpringMvcConfig extends WebMvcConfigurerAdapter {
 

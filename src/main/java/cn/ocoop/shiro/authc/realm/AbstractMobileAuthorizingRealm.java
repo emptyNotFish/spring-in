@@ -2,8 +2,8 @@ package cn.ocoop.shiro.authc.realm;
 
 import cn.ocoop.shiro.authc.realm.resolves.MobileCaptchaSubjectResolve;
 import cn.ocoop.shiro.authc.realm.resolves.SubjectResolve;
-import cn.ocoop.shiro.spring.AppContextShiro;
 import cn.ocoop.shiro.subject.User;
+import cn.ocoop.spring.App;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -22,7 +22,7 @@ public abstract class AbstractMobileAuthorizingRealm extends AbstractAuthorizing
     }
 
     protected SubjectResolve getSubjectResolve() {
-        return AppContextShiro.getBean(MobileCaptchaSubjectResolve.class);
+        return App.getBean(MobileCaptchaSubjectResolve.class);
     }
 
 

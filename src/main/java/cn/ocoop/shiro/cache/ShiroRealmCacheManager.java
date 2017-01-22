@@ -1,6 +1,6 @@
 package cn.ocoop.shiro.cache;
 
-import cn.ocoop.shiro.spring.AppContextShiro;
+import cn.ocoop.spring.App;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.cache.Cache;
@@ -173,6 +173,6 @@ public class ShiroRealmCacheManager {
     }
 
     private static Collection<Realm> getRealms() {
-        return AppContextShiro.getBean(DefaultSecurityManager.class).getRealms();
+        return App.getBean(DefaultSecurityManager.class).getRealms();
     }
 }

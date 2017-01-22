@@ -1,8 +1,8 @@
 package cn.ocoop.shiro.authc.realm.resolves;
 
 import cn.ocoop.shiro.authc.realm.resolves.delegate.SubjectResolveAware;
-import cn.ocoop.shiro.spring.AppContextShiro;
 import cn.ocoop.shiro.subject.User;
+import cn.ocoop.spring.App;
 import org.apache.shiro.authc.AuthenticationToken;
 
 import java.util.List;
@@ -20,19 +20,19 @@ public abstract class SubjectResolve {
     }
 
     private Object findLoginUserInfo(String userId, boolean needBindOpenId) {
-        return AppContextShiro.getBean(SubjectResolveAware.class).findLoginUserInfo(userId, needBindOpenId);
+        return App.getBean(SubjectResolveAware.class).findLoginUserInfo(userId, needBindOpenId);
     }
 
     public List<String> findRoles(String userId) {
-        return AppContextShiro.getBean(SubjectResolveAware.class).findRoles(userId);
+        return App.getBean(SubjectResolveAware.class).findRoles(userId);
     }
 
     public List<String> findPermissions(String userId) {
-        return AppContextShiro.getBean(SubjectResolveAware.class).findPermissions(userId);
+        return App.getBean(SubjectResolveAware.class).findPermissions(userId);
     }
 
     public User unknownAccountProcess(AuthenticationToken token) {
-        return AppContextShiro.getBean(SubjectResolveAware.class).unknownAccountProcess(token);
+        return App.getBean(SubjectResolveAware.class).unknownAccountProcess(token);
     }
 }
 

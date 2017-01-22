@@ -1,5 +1,6 @@
 package cn.ocoop.redis;
 
+import cn.ocoop.spring.App;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -13,7 +14,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import java.util.Optional;
 
 @Configuration
-@DependsOn(value = "appContextRedis")
+@DependsOn(value = "app")
 public class SpringDataRedisConfig {
     private static final Logger log = LoggerFactory.getLogger(SpringDataRedisConfig.class);
     @Bean
@@ -31,7 +32,7 @@ public class SpringDataRedisConfig {
     private RedisConfig getRedisConfig() {
         RedisConfig redisConfig = null;
         try {
-            redisConfig = AppContextRedis.getBean(RedisConfigService.class).getRedisConfig();
+            redisConfig = App.getBean(RedisConfigService.class).getRedisConfig();
         } catch (NoSuchBeanDefinitionException e) {
             log.warn("RedisConfigService未配置");
         }

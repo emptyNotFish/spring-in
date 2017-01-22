@@ -19,6 +19,7 @@ import cn.ocoop.shiro.session.mgt.ShiroCacheManagerRedisAdapter;
 import cn.ocoop.shiro.session.mgt.ShiroSessionDao;
 import cn.ocoop.shiro.session.mgt.ShiroSessionDaoRedisAdapter;
 import cn.ocoop.shiro.utils.RequestUtil;
+import cn.ocoop.spring.App;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections.MapUtils;
@@ -51,7 +52,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Configuration
-@DependsOn(value = {"appContextShiro"})
+@DependsOn(value = {"app"})
 @Import(SpringDataRedisConfig.class)
 public class ShiroConfig {
     private static final Logger log = LoggerFactory.getLogger(ShiroConfig.class);
@@ -138,7 +139,7 @@ public class ShiroConfig {
     public ShiroSessionDaoRedisAdapter shiroSessionDaoRedisAdapter() {
         ShiroSessionDaoRedisAdapter shiroSessionDaoRedisAdapter = new ShiroSessionDaoRedisAdapter();
         shiroSessionDaoRedisAdapter.setSessionPrefix(environment.getProperty("shiro.session.prefix", "shiro:session:"));
-        shiroSessionDaoRedisAdapter.setRedisTemplate(AppContextShiro.getBean(RedisTemplate.class));
+        shiroSessionDaoRedisAdapter.setRedisTemplate(App.getBean(RedisTemplate.class));
         return shiroSessionDaoRedisAdapter;
     }
 
@@ -171,7 +172,7 @@ public class ShiroConfig {
 
         ShiroCacheManagerRedisAdapter shiroCacheManagerRedisAdapter = new ShiroCacheManagerRedisAdapter();
         shiroCacheManagerRedisAdapter.setCachePrefix(environment.getProperty("shiro.cache.prefix", "shiro:cache:"));
-        shiroCacheManagerRedisAdapter.setRedisTemplate(AppContextShiro.getBean(RedisTemplate.class));
+        shiroCacheManagerRedisAdapter.setRedisTemplate(App.getBean(RedisTemplate.class));
 
         shiroCacheManager.setShiroCacheManagerAware(shiroCacheManagerRedisAdapter);
         return shiroCacheManager;
@@ -336,7 +337,7 @@ public class ShiroConfig {
 
         Map<String, Filter> userFilters = null;
         try {
-            userFilters = AppContextShiro.getBean(FilterChainService.class).getFilters();
+            userFilters = App.getBean(FilterChainService.class).getFilters();
         } catch (NoSuchBeanDefinitionException e) {
             log.warn("FilterChainService未配置");
         }

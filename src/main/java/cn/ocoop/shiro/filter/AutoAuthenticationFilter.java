@@ -3,8 +3,8 @@ package cn.ocoop.shiro.filter;
 import cn.ocoop.shiro.AutoDetectedToken;
 import cn.ocoop.shiro.authc.resolvers.AutoDetectedIdentifyAuthenticationResolver;
 import cn.ocoop.shiro.cache.ShiroRealmCacheManager;
-import cn.ocoop.shiro.spring.AppContextShiro;
 import cn.ocoop.shiro.utils.RequestUtil;
+import cn.ocoop.spring.App;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -29,7 +29,7 @@ public class AutoAuthenticationFilter extends AdviceFilter {
     public boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         try {
             HttpServletRequest httpServletRequest = WebUtils.toHttp(request);
-            Environment environment = AppContextShiro.getBean(Environment.class);
+            Environment environment = App.getBean(Environment.class);
 
             if (RequestUtil.isAjaxRequest(httpServletRequest))
                 return super.preHandle(request, response);
@@ -54,7 +54,7 @@ public class AutoAuthenticationFilter extends AdviceFilter {
                     request.getRemoteHost(),
                     openId
             );
-            AppContextShiro.getBean(AutoDetectedIdentifyAuthenticationResolver.class).login(request, response, token);
+            App.getBean(AutoDetectedIdentifyAuthenticationResolver.class).login(request, response, token);
             return super.preHandle(request, response);
         } catch (Exception e) {
             log.error("auto detected identify is fail", e);
@@ -66,7 +66,7 @@ public class AutoAuthenticationFilter extends AdviceFilter {
         log.info("request from WeiXin:code:{}", getWeiXinCode(request));
         String openId = null;
         try {
-            openId = AppContextShiro.getBean(WeiXinAware.class).getOpenId(getWeiXinCode(request));
+            openId = App.getBean(WeiXinAware.class).getOpenId(getWeiXinCode(request));
         } catch (NoSuchBeanDefinitionException e) {
             log.warn("WeiXinAware未配置");
         }

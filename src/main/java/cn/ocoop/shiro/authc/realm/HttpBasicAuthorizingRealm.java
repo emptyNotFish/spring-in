@@ -3,8 +3,8 @@ package cn.ocoop.shiro.authc.realm;
 import cn.ocoop.shiro.HttpBasicToken;
 import cn.ocoop.shiro.authc.realm.resolves.delegate.HttpBasicSubjectAware;
 import cn.ocoop.shiro.authz.SimpleAuthorizationInfoOrdered;
-import cn.ocoop.shiro.spring.AppContextShiro;
 import cn.ocoop.shiro.subject.BasicHttpAuthcUser;
+import cn.ocoop.spring.App;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -50,7 +50,7 @@ public class HttpBasicAuthorizingRealm extends AbstractAuthorizingRealm {
     private static Collection<BasicHttpAuthcUser> getUsers() {
         Collection<BasicHttpAuthcUser> users = null;
         try {
-            users = AppContextShiro.getBean(HttpBasicSubjectAware.class).getUsers();
+            users = App.getBean(HttpBasicSubjectAware.class).getUsers();
         } catch (NoSuchBeanDefinitionException e) {
             log.warn("HttpBasicSubjectAware未配置");
         }

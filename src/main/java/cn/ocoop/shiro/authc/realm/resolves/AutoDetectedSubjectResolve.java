@@ -2,8 +2,8 @@ package cn.ocoop.shiro.authc.realm.resolves;
 
 import cn.ocoop.shiro.AutoDetectedToken;
 import cn.ocoop.shiro.authc.realm.resolves.delegate.AutoDetectedSubjectResolveAware;
-import cn.ocoop.shiro.spring.AppContextShiro;
 import cn.ocoop.shiro.subject.User;
+import cn.ocoop.spring.App;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class AutoDetectedSubjectResolve extends SubjectResolve {
 
     @Override
     public User findLoginUser(AuthenticationToken token) {
-        return AppContextShiro.getBean(AutoDetectedSubjectResolveAware.class).findLoginUser((AutoDetectedToken) token);
+        return App.getBean(AutoDetectedSubjectResolveAware.class).findLoginUser((AutoDetectedToken) token);
     }
 
 }
