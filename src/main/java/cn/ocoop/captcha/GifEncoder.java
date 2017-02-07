@@ -27,69 +27,31 @@ public class GifEncoder {
     protected boolean sizeSet = false; // if false, get size from first frame
     protected int sample = 10; // default sample interval for quantizer
 
-    /**
-     * Sets the delay time between each frame, or changes it
-     * for subsequent frames (applies to last frame added).
-     *
-     * @param ms int delay time in milliseconds
-     */
+    
     public void setDelay(int ms) {
         delay = Math.round(ms / 10.0f);
     }
 
-    /**
-     * Sets the GIF frame disposal code for the last added frame
-     * and any subsequent frames.  Default is 0 if no transparent
-     * color has been set, otherwise 2.
-     *
-     * @param code int disposal code.
-     */
+    
     public void setDispose(int code) {
         if (code >= 0) {
             dispose = code;
         }
     }
 
-    /**
-     * Sets the number of times the set of GIF frames
-     * should be played.  Default is 1; 0 means play
-     * indefinitely.  Must be invoked before the first
-     * image is added.
-     *
-     * @param iter int number of iterations.
-     * @return
-     */
+    
     public void setRepeat(int iter) {
         if (iter >= 0) {
             repeat = iter;
         }
     }
 
-    /**
-     * Sets the transparent color for the last added frame
-     * and any subsequent frames.
-     * Since all colors are subject to modification
-     * in the quantization process, the color in the final
-     * palette for each frame closest to the given color
-     * becomes the transparent color for that frame.
-     * May be set to null to indicate no transparent color.
-     *
-     * @param c Color to be treated as transparent on display.
-     */
+    
     public void setTransparent(Color c) {
         transparent = c;
     }
 
-    /**
-     * Adds next GIF frame.  The frame is not written immediately, but is
-     * actually deferred until the next frame is received so that timing
-     * data can be inserted.  Invoking <code>finish()</code> flushes all
-     * frames.  If <code>setSize</code> was not invoked, the size of the
-     * first image is used for all subsequent frames.
-     *
-     * @param im BufferedImage containing frame to write.
-     * @return true if successful.
-     */
+    
     public boolean addFrame(BufferedImage im) {
         if ((im == null) || !started) {
             return false;
@@ -142,11 +104,7 @@ public class GifEncoder {
         return ((ByteArrayOutputStream) out).toByteArray();
     }
 
-    /**
-     * Flushes any pending data and closes output file.
-     * If writing to an OutputStream, the stream is not
-     * closed.
-     */
+    
     public boolean finish() {
         if (!started) return false;
         boolean ok = true;
@@ -176,42 +134,20 @@ public class GifEncoder {
         firstFrame = true;
     }
 
-    /**
-     * Sets frame rate in frames per second.  Equivalent to
-     * <code>setDelay(1000/fps)</code>.
-     *
-     * @param fps float frame rate (frames per second)
-     */
+    
     public void setFrameRate(float fps) {
         if (fps != 0f) {
             delay = Math.round(100f / fps);
         }
     }
 
-    /**
-     * Sets quality of color quantization (conversion of images
-     * to the maximum 256 colors allowed by the GIF specification).
-     * Lower values (minimum = 1) produce better colors, but slow
-     * processing significantly.  10 is the default, and produces
-     * good color mapping at reasonable speeds.  Values greater
-     * than 20 do not yield significant improvements in speed.
-     *
-     * @param quality int greater than 0.
-     * @return
-     */
+    
     public void setQuality(int quality) {
         if (quality < 1) quality = 1;
         sample = quality;
     }
 
-    /**
-     * Sets the GIF frame size.  The default size is the
-     * size of the first frame added if this method is
-     * not invoked.
-     *
-     * @param w int frame width.
-     * @param h int frame width.
-     */
+    
     public void setSize(int w, int h) {
         if (started && !firstFrame) return;
         width = w;
@@ -221,13 +157,7 @@ public class GifEncoder {
         sizeSet = true;
     }
 
-    /**
-     * Initiates GIF file creation on the given stream.  The stream
-     * is not closed automatically.
-     *
-     * @param os OutputStream on which GIF images are written.
-     * @return false if initial write failed.
-     */
+    
     public boolean start(OutputStream os) {
         if (os == null) return false;
         boolean ok = true;
@@ -241,12 +171,7 @@ public class GifEncoder {
         return started = ok;
     }
 
-    /**
-     * Initiates writing of a GIF file with the specified name.
-     *
-     * @param file String containing output file name.
-     * @return false if open or initial write failed.
-     */
+    
     public boolean start(String file) {
         boolean ok = true;
         try {
@@ -259,9 +184,7 @@ public class GifEncoder {
         return started = ok;
     }
 
-    /**
-     * Analyzes image colors and creates color map.
-     */
+    
     protected void analyzePixels() {
         int len = pixels.length;
         int nPix = len / 3;
@@ -295,9 +218,7 @@ public class GifEncoder {
         }
     }
 
-    /**
-     * Returns index of palette color closest to c
-     */
+    
     protected int findClosest(Color c) {
         if (colorTab == null) return -1;
         int r = c.getRed();
@@ -321,9 +242,7 @@ public class GifEncoder {
         return minpos;
     }
 
-    /**
-     * Extracts image pixels into byte array "pixels"
-     */
+    
     protected void getImagePixels() {
         int w = image.getWidth();
         int h = image.getHeight();
@@ -341,9 +260,7 @@ public class GifEncoder {
         pixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
     }
 
-    /**
-     * Writes Graphic Control Extension
-     */
+    
     protected void writeGraphicCtrlExt() throws IOException {
         out.write(0x21); // extension introducer
         out.write(0xf9); // GCE label
@@ -372,9 +289,7 @@ public class GifEncoder {
         out.write(0); // block terminator
     }
 
-    /**
-     * Writes Image Descriptor
-     */
+    
     protected void writeImageDesc() throws IOException {
         out.write(0x2c); // image separator
         writeShort(0); // image position x,y = 0,0
@@ -395,9 +310,7 @@ public class GifEncoder {
         }
     }
 
-    /**
-     * Writes Logical Screen Descriptor
-     */
+    
     protected void writeLSD() throws IOException {
         // logical screen size
         writeShort(width);
@@ -412,10 +325,7 @@ public class GifEncoder {
         out.write(0); // pixel aspect ratio - assume 1:1
     }
 
-    /**
-     * Writes Netscape application extension to define
-     * repeat count.
-     */
+    
     protected void writeNetscapeExt() throws IOException {
         out.write(0x21); // extension introducer
         out.write(0xff); // app extension label
@@ -427,9 +337,7 @@ public class GifEncoder {
         out.write(0); // block terminator
     }
 
-    /**
-     * Writes color table
-     */
+    
     protected void writePalette() throws IOException {
         out.write(colorTab, 0, colorTab.length);
         int n = (3 * 256) - colorTab.length;
@@ -438,25 +346,19 @@ public class GifEncoder {
         }
     }
 
-    /**
-     * Encodes and writes pixel data
-     */
+    
     protected void writePixels() throws IOException {
         Encoder encoder = new Encoder(width, height, indexedPixels, colorDepth);
         encoder.encode(out);
     }
 
-    /**
-     * Write 16-bit value to output stream, LSB first
-     */
+    
     protected void writeShort(int value) throws IOException {
         out.write(value & 0xff);
         out.write((value >> 8) & 0xff);
     }
 
-    /**
-     * Writes string to output stream
-     */
+    
     protected void writeString(String s) throws IOException {
         for (int i = 0; i < s.length(); i++) {
             out.write((byte) s.charAt(i));

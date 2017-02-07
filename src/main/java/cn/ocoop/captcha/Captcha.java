@@ -59,11 +59,6 @@ public abstract class Captcha {
         this.height = height;
     }
 
-    /**
-     * 给定范围获得随机颜色
-     *
-     * @return Color 随机颜色
-     */
     protected Color color(int fc, int bc) {
         if (fc > 255)
             fc = 255;
@@ -75,11 +70,6 @@ public abstract class Captcha {
         return new Color(r, g, b);
     }
 
-    /**
-     * 验证码输出,抽象方法，由子类实现
-     *
-     * @param os 输出流
-     */
     public abstract void out(OutputStream os) throws IOException;
 
     public String getCaptcha() {

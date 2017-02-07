@@ -13,19 +13,13 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class GifDecoder {
-    /**
-     * File read status: No errors.
-     */
+    
     public static final int STATUS_OK = 0;
 
-    /**
-     * File read status: Error decoding file (may be partially decoded)
-     */
+    
     public static final int STATUS_FORMAT_ERROR = 1;
 
-    /**
-     * File read status: Unable to open source.
-     */
+    
     public static final int STATUS_OPEN_ERROR = 2;
     protected static final int MaxStackSize = 4096;
     protected BufferedInputStream in;
@@ -68,12 +62,7 @@ public class GifDecoder {
     protected ArrayList<GifFrame> frames; // frames read from current file
     protected int frameCount;
 
-    /**
-     * Gets display duration for specified frame.
-     *
-     * @param n int index of frame
-     * @return delay in milliseconds
-     */
+    
     public int getDelay(int n) {
         //
         delay = -1;
@@ -83,38 +72,22 @@ public class GifDecoder {
         return delay;
     }
 
-    /**
-     * Gets the number of frames read from file.
-     *
-     * @return frame count
-     */
+    
     public int getFrameCount() {
         return frameCount;
     }
 
-    /**
-     * Gets the first (or only) image read.
-     *
-     * @return BufferedImage containing first frame, or null if none.
-     */
+    
     public BufferedImage getImage() {
         return getFrame(0);
     }
 
-    /**
-     * Gets the "Netscape" iteration count, if any.
-     * A count of 0 means repeat indefinitiely.
-     *
-     * @return iteration count if one was specified, else 1.
-     */
+    
     public int getLoopCount() {
         return loopCount;
     }
 
-    /**
-     * Creates new frame image from current data (and previous
-     * frames as specified by their disposition codes).
-     */
+    
     protected void setPixels() {
         // expose destination image's pixels as int array
         int[] dest = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -201,11 +174,7 @@ public class GifDecoder {
         }
     }
 
-    /**
-     * Gets the image contents of frame n.
-     *
-     * @return BufferedImage representation of frame, or null if n is invalid.
-     */
+    
     public BufferedImage getFrame(int n) {
         BufferedImage im = null;
         if ((n >= 0) && (n < frameCount)) {
@@ -214,21 +183,12 @@ public class GifDecoder {
         return im;
     }
 
-    /**
-     * Gets image size.
-     *
-     * @return GIF image dimensions
-     */
+    
     public Dimension getFrameSize() {
         return new Dimension(width, height);
     }
 
-    /**
-     * Reads GIF image from stream
-     *
-     * @param is BufferedInputStream containing GIF file.
-     * @return read status code (0 = no errors)
-     */
+    
     public int read(BufferedInputStream is) {
         init();
         try {
@@ -250,12 +210,7 @@ public class GifDecoder {
         return status;
     }
 
-    /**
-     * Reads GIF image from stream
-     *
-     * @param is InputStream containing GIF file.
-     * @return read status code (0 = no errors)
-     */
+    
     public int read(InputStream is) {
         init();
         try {
@@ -279,13 +234,7 @@ public class GifDecoder {
         return status;
     }
 
-    /**
-     * Reads GIF file from specified file/URL source
-     * (URL assumed if name contains ":/" or "file:")
-     *
-     * @param name String containing source
-     * @return read status code (0 = no errors)
-     */
+    
     public int read(String name) {
         status = STATUS_OK;
         try {
@@ -304,10 +253,7 @@ public class GifDecoder {
         return status;
     }
 
-    /**
-     * Decodes LZW image data into pixel array.
-     * Adapted from John Cristy's ImageMagick.
-     */
+    
     protected void decodeImageData() {
         int NullCode = -1;
         int npix = iw * ih;
@@ -436,16 +382,11 @@ public class GifDecoder {
 
     }
 
-    /**
-     * Returns true if an error was encountered during reading/decoding
-     */
     protected boolean err() {
         return status != STATUS_OK;
     }
 
-    /**
-     * Initializes or re-initializes reader
-     */
+    
     protected void init() {
         status = STATUS_OK;
         frameCount = 0;
@@ -454,9 +395,6 @@ public class GifDecoder {
         lct = null;
     }
 
-    /**
-     * Reads a single byte from the input stream.
-     */
     protected int read() {
         int curByte = 0;
         try {
@@ -467,11 +405,7 @@ public class GifDecoder {
         return curByte;
     }
 
-    /**
-     * Reads next variable length block from input.
-     *
-     * @return number of bytes stored in "buffer"
-     */
+    
     protected int readBlock() {
         blockSize = read();
         int n = 0;
@@ -494,12 +428,7 @@ public class GifDecoder {
         return n;
     }
 
-    /**
-     * Reads color table as 256 RGB integer values
-     *
-     * @param ncolors int number of colors to read
-     * @return int array containing 256 colors (packed ARGB with full alpha)
-     */
+    
     protected int[] readColorTable(int ncolors) {
         int nbytes = 3 * ncolors;
         int[] tab = null;
@@ -525,9 +454,7 @@ public class GifDecoder {
         return tab;
     }
 
-    /**
-     * Main file parser.  Reads GIF content blocks.
-     */
+    
     protected void readContents() {
         // read GIF file content blocks
         boolean done = false;
@@ -576,9 +503,7 @@ public class GifDecoder {
         }
     }
 
-    /**
-     * Reads Graphics Control Extension values
-     */
+    
     protected void readGraphicControlExt() {
         read(); // block size
         int packed = read(); // packed fields
@@ -592,9 +517,7 @@ public class GifDecoder {
         read(); // block terminator
     }
 
-    /**
-     * Reads GIF file header information.
-     */
+    
     protected void readHeader() {
         String id = "";
         for (int i = 0; i < 6; i++) {
@@ -612,9 +535,7 @@ public class GifDecoder {
         }
     }
 
-    /**
-     * Reads next frame image
-     */
+    
     protected void readImage() {
         ix = readShort(); // (sub)image position & size
         iy = readShort();
@@ -670,9 +591,7 @@ public class GifDecoder {
 
     }
 
-    /**
-     * Reads Logical Screen Descriptor
-     */
+    
     protected void readLSD() {
 
         // logical screen size
@@ -690,9 +609,7 @@ public class GifDecoder {
         pixelAspect = read(); // pixel aspect ratio
     }
 
-    /**
-     * Reads Netscape extenstion to obtain iteration count
-     */
+    
     protected void readNetscapeExt() {
         do {
             readBlock();
@@ -705,17 +622,12 @@ public class GifDecoder {
         } while ((blockSize > 0) && !err());
     }
 
-    /**
-     * Reads next 16-bit value, LSB first
-     */
     protected int readShort() {
         // read 16-bit value, LSB first
         return read() | (read() << 8);
     }
 
-    /**
-     * Resets frame state for reading next image.
-     */
+    
     protected void resetFrame() {
         lastDispose = dispose;
         lastRect = new Rectangle(ix, iy, iw, ih);
@@ -727,10 +639,7 @@ public class GifDecoder {
         lct = null;
     }
 
-    /**
-     * Skips variable length blocks up to and including
-     * next zero length block.
-     */
+    
     protected void skip() {
         do {
             readBlock();
