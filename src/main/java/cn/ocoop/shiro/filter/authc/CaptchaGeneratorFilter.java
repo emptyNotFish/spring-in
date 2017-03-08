@@ -18,7 +18,7 @@ public class CaptchaGeneratorFilter extends RateLimitWithCaptchaFilter {
 
     public void doFilterInternal(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         Captcha captcha = getCaptcha();
-        Session session = SecurityUtils.getSubject().getSession(false);
+        Session session = SecurityUtils.getSubject().getSession();
         if (session == null) return;
 
         session.setAttribute(SUBMIT_CAPTCHA, captcha.getCaptcha());
