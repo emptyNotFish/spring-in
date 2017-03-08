@@ -2,15 +2,24 @@ package cn.ocoop.shiro.authc.realm;
 
 import cn.ocoop.shiro.MobileCaptchaToken;
 import cn.ocoop.shiro.authc.IncorrectCaptchaException;
+import cn.ocoop.shiro.authc.realm.resolves.MobileCaptchaSubjectResolve;
+import cn.ocoop.shiro.authc.realm.resolves.SubjectResolve;
 import cn.ocoop.shiro.sms.AuthcSmsCaptchaService;
 import cn.ocoop.shiro.subject.User;
+import cn.ocoop.spring.App;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.util.SimpleByteSource;
 
 /**
  * Created by liolay on 2016/12/6.
  */
-public class MobileCaptchaAuthorizingRealm extends AbstractMobileAuthorizingRealm {
+public class MobileCaptchaAuthorizingRealm extends AbstractAuthorizingRealm {
+
+
+    protected SubjectResolve getSubjectResolve() {
+        return App.getBean(MobileCaptchaSubjectResolve.class);
+    }
+
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -19,9 +28,10 @@ public class MobileCaptchaAuthorizingRealm extends AbstractMobileAuthorizingReal
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        User user = getSubjectResolve().findLoginUser(token);
+        MobileCaptchaSubjectResolve subjectResolve = (MobileCaptchaSubjectResolve)getSubjectResolve();
+        User user = subjectResolve.findLoginUser(token);
         if (user == null) {//没找到帐号
-            user = getSubjectResolve().unknownAccountProcess(token);
+            user = subjectResolve.unknownAccountProcess(token);
         }
         if (user == null) {//没找到帐号
             throw new UnknownAccountException();

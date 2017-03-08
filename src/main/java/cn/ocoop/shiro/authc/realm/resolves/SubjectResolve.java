@@ -30,9 +30,5 @@ public abstract class SubjectResolve {
     public List<String> findPermissions(String userId) {
         return App.getBean(SubjectResolveAware.class).findPermissions(userId);
     }
-
-    public User unknownAccountProcess(AuthenticationToken token) {
-        return App.getBean(SubjectResolveAware.class).unknownAccountProcess(token);
-    }
 }
 

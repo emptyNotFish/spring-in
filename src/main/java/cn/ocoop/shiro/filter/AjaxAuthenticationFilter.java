@@ -5,6 +5,7 @@ import cn.ocoop.shiro.UsernamePasswordToken;
 import cn.ocoop.shiro.authc.LoginType;
 import cn.ocoop.shiro.authc.realm.resolves.MobileCaptchaSubjectResolve;
 import cn.ocoop.shiro.authc.realm.resolves.SubjectResolve;
+import cn.ocoop.shiro.authc.realm.resolves.UsernamePasswordSubjectResolve;
 import cn.ocoop.shiro.cache.ShiroRealmCacheManager;
 import cn.ocoop.shiro.utils.RequestUtil;
 import cn.ocoop.shiro.utils.SubjectUtil;
@@ -29,16 +30,22 @@ import javax.servlet.http.HttpServletResponse;
 public class AjaxAuthenticationFilter extends FormAuthenticationFilter {
     public static final String USER_INFO_KEY = "user";
     public static final String DEFAULT_ERROR_KEY_EXCEPTION_NAME = "shiroLoginFailureException";
-    public static final String LOGIN_TYPE = getEnvironment().getProperty("shiro.authc.loginTypeParam","loginType");
+    public static final String LOGIN_TYPE = getEnvironment().getProperty("shiro.authc.loginTypeParam", "loginType");
+    private static final Logger log = LoggerFactory.getLogger(AjaxAuthenticationFilter.class);
+    protected int unLoginStatusCode = RequestUtil.SC_UNLOGIN_1;
 
     private static Environment getEnvironment() {
         return App.getBean(Environment.class);
     }
-    private static final Logger log = LoggerFactory.getLogger(AjaxAuthenticationFilter.class);
-    protected int unLoginStatusCode = RequestUtil.SC_UNLOGIN_1;
 
     public void setUnLoginStatusCode(int unLoginStatusCode) {
         this.unLoginStatusCode = unLoginStatusCode;
+    }
+
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        if (isLoginRequest(request, response) && SecurityUtils.getSubject().getPrincipal() != null) return false;
+
+        return super.isAccessAllowed(request, response, mappedValue);
     }
 
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
@@ -79,7 +86,7 @@ public class AjaxAuthenticationFilter extends FormAuthenticationFilter {
     }
 
     protected String getDefaultSuccessUrl() {
-        return null;
+        return "index";
     }
 
     protected void resolveLoginInfo(AuthenticationToken token) {
@@ -96,8 +103,11 @@ public class AjaxAuthenticationFilter extends FormAuthenticationFilter {
 
     private SubjectResolve getSubjectResolve(AuthenticationToken token) {
 
-        if (MobileCaptchaToken.class.isAssignableFrom(token.getClass()) || UsernamePasswordToken.class.isAssignableFrom(token.getClass())) {
+        if (MobileCaptchaToken.class.isAssignableFrom(token.getClass())) {
             return App.getBean(MobileCaptchaSubjectResolve.class);
+        }
+        if (UsernamePasswordToken.class.isAssignableFrom(token.getClass())) {
+            return App.getBean(UsernamePasswordSubjectResolve.class);
         }
         throw new Error("不支持的token类型");
     }

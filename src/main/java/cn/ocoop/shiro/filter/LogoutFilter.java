@@ -8,7 +8,7 @@ import javax.servlet.ServletResponse;
 
 public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter {
     protected String getRedirectUrl(ServletRequest request, ServletResponse response, Subject subject) {
-        return App.getBean(AjaxAuthenticationFilter.class).getLoginUrl();
+        return ((AjaxAuthenticationFilter) App.getBean("ajaxAuthenticationFilter")).getLoginUrl();
     }
 
 }
