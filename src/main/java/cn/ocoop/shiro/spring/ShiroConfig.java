@@ -10,6 +10,7 @@ import cn.ocoop.shiro.filter.AutoAuthenticationFilter;
 import cn.ocoop.shiro.filter.HttpBasicAuthenticationFilter;
 import cn.ocoop.shiro.filter.LogoutFilter;
 import cn.ocoop.shiro.filter.authc.CaptchaGeneratorFilter;
+import cn.ocoop.shiro.filter.authc.CaptchaVerifyFilter;
 import cn.ocoop.shiro.filter.authc.RateLimitWithCaptchaFilter;
 import cn.ocoop.shiro.filter.authz.AnyRolesAuthorizationFilterAdapter;
 import cn.ocoop.shiro.filter.authz.PermissionsAuthorizationFilterAdapter;
@@ -330,6 +331,7 @@ public class ShiroConfig {
         filters.put("logout", new LogoutFilter());
         filters.put("autoAuth", new AutoAuthenticationFilter());
         filters.put("captcha", new CaptchaGeneratorFilter());
+        filters.put("captchaVerify", new CaptchaVerifyFilter());
         filters.put("rateLimit", new RateLimitWithCaptchaFilter(
                 environment.getProperty("shiro.captcha.maxRate", long.class, 10l),
                 environment.getProperty("shiro.captcha.rateLifeTime", long.class, 3600000l)

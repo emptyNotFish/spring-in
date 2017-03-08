@@ -9,6 +9,7 @@ public class User implements Serializable {
     private String salt;
     private String locked;
     private String userId;
+    private String state;
 
     public User() {
     }
@@ -19,6 +20,14 @@ public class User implements Serializable {
         this.password = password;
         this.salt = salt;
         this.locked = locked;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getUserId() {

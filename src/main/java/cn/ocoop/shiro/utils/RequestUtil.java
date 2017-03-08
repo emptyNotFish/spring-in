@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 public class RequestUtil {
 
     public static final int SC_INVALID_CAPTCHA = 420;//验证码发送太频繁/不正确
+    public static final int SC_INVALID_CAPTCHA1 = 433;//验证码不正确
     public static final int SC_UNLOGIN = 418;//未登录
     public static final int SC_UNLOGIN_1 = 419;//未登录
     public static final int SC_UNLOGIN_2 = 421;//未登录

@@ -1,6 +1,7 @@
 package cn.ocoop.shiro.authc.realm;
 
 import cn.ocoop.shiro.UsernamePasswordToken;
+import cn.ocoop.shiro.authc.exception.UnActivedAccountException;
 import cn.ocoop.shiro.authc.realm.resolves.SubjectResolve;
 import cn.ocoop.shiro.authc.realm.resolves.UsernamePasswordSubjectResolve;
 import cn.ocoop.shiro.subject.User;
@@ -32,8 +33,14 @@ public class UsernamePasswordRealm extends AbstractAuthorizingRealm {
             throw authenticationException;
         }
 
-        if ("lock".equals(user.getLocked())) {//没找到帐号
+        if ("lock".equals(user.getLocked())) {//已锁定
             AuthenticationException authenticationException = new LockedAccountException();
+            usernamePasswordToken.setAuthenticationException(authenticationException);
+            throw authenticationException;
+        }
+
+        if ("2".equals(user.getLocked())) {//未激活
+            AuthenticationException authenticationException = new UnActivedAccountException();
             usernamePasswordToken.setAuthenticationException(authenticationException);
             throw authenticationException;
         }
