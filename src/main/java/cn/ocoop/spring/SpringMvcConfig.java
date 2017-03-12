@@ -59,7 +59,7 @@ public class SpringMvcConfig extends WebMvcConfigurerAdapter {
                         DefaultSerializerProvider.Impl sp = new DefaultSerializerProvider.Impl();
                         sp.setNullValueSerializer(new JsonSerializer<Object>() {
                             public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-                                jgen.writeString("");
+                                jgen.writeNull();
                             }
                         });
                         this.setSerializerProvider(sp);
