@@ -1,5 +1,7 @@
 package cn.ocoop.spring;
 
+import cn.ocoop.spring.annotation.MvcConfiguration;
+import cn.ocoop.spring.annotation.SpringConfiguration;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
@@ -33,21 +35,27 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-@Configuration
 @EnableWebMvc
+@Configuration
+@MvcConfiguration
 @ComponentScan(
-        basePackages = "cn.ocoop.spring,${springmvc.basePackages}",
+        basePackages = "cn.ocoop.spring,${spring.basePackages}",
         useDefaultFilters = false,
         includeFilters = {
                 @ComponentScan.Filter(
                         type = FilterType.ANNOTATION,
-                        value = {ControllerAdvice.class, Controller.class, RestControllerAdvice.class, RestController.class}
+                        value = {MvcConfiguration.class,ControllerAdvice.class, Controller.class, RestControllerAdvice.class, RestController.class}
                 ),
                 @ComponentScan.Filter(
                         type = FilterType.ASSIGNABLE_TYPE,
                         value = {WebMvcConfigurerAdapter.class}
                 )
-        }
+        },
+        excludeFilters = @ComponentScan.Filter(
+                value = {
+                        SpringConfiguration.class
+                }
+        )
 )
 public class SpringMvcConfig extends WebMvcConfigurerAdapter {
 
