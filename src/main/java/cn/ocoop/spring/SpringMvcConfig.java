@@ -20,6 +20,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -44,7 +45,7 @@ import java.util.List;
         includeFilters = {
                 @ComponentScan.Filter(
                         type = FilterType.ANNOTATION,
-                        value = {MvcConfiguration.class,ControllerAdvice.class, Controller.class, RestControllerAdvice.class, RestController.class}
+                        value = {MvcConfiguration.class, ControllerAdvice.class, Controller.class, RestControllerAdvice.class, RestController.class, Component.class}
                 ),
                 @ComponentScan.Filter(
                         type = FilterType.ASSIGNABLE_TYPE,
